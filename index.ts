@@ -254,6 +254,4 @@ class MultiGenericStore<T, U> {
     }
 }
 
-console.log("salom");
-
 const myStore = new MultiGenericStore<string, number>("user_id", 12345);
