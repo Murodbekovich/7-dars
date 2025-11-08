@@ -1,257 +1,386 @@
-// 1)
-function identity<T>(arg: T): T {
-    return arg;
+class Car {
+  model: string;
+  year: number;
+  color: string;
+
+  constructor(model: string, year: number, color: string) {
+    this.model = model;
+    this.year = year;
+    this.color = color;
+  }
+
+  changeColor(newColor: string) {
+    this.color = newColor;
+  }
+
+  displayInfo() {
+    console.log(`Model: ${this.model}, Year: ${this.year}, Color: ${this.color}`);
+  }
 }
 
-function getFirstElement<T>(arr: T[]): T | undefined {
-    return arr[0];
+const car1 = new Car("BMW", 2020, "Black");
+car1.displayInfo();
+car1.changeColor("Red");
+car1.displayInfo();
+
+class Student {
+  firstName: string;
+  lastName: string;
+  grade: number;
+
+  constructor(firstName: string, lastName: string, grade: number) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.grade = grade;
+  }
+
+  getFullName(): string {
+    return `${this.firstName} ${this.lastName}`;
+  }
+
+  changeGrade(newGrade: number) {
+    this.grade = newGrade;
+  }
 }
 
-function getLastElement<T>(arr: T[]): T | undefined {
-    return arr.length > 0 ? arr[arr.length - 1] : undefined;
-}
+const student1 = new Student("Ali", "Valiyev", 9);
+console.log(student1.getFullName());
+student1.changeGrade(10);
+console.log(student1);
 
-interface KeyValuePair<K, V> {
-    key: K;
-    value: V;
-}
 
-const myObject: KeyValuePair<number, string> = { key: 1, value: "Hello" };
+class BankAccount {
+  private balance: number;
 
-interface Lengthwise {
-    length: number;
-}
+  constructor(initialBalance: number) {
+    this.balance = initialBalance;
+  }
 
-function loggingIdentity<T extends Lengthwise>(arg: T): T {
-    return arg;
-}
+  deposit(amount: number) {
+    this.balance += amount;
+    console.log(`Hisobingizga ${amount} so‘m qo‘shildi.`);
+  }
 
-function getMinZoneValue(zones: number[]): number | undefined {
-    if (zones.length === 0) {
-        return undefined;
+  withdraw(amount: number) {
+    if (amount > this.balance) {
+      console.log("Balansda yetarli mablag‘ yo‘q!");
+    } else {
+      this.balance -= amount;
+      console.log(`${amount} so‘m yechildi.`);
     }
-    return Math.min(...zones);
+  }
+
+  getBalance() {
+    return this.balance;
+  }
+}
+
+const acc = new BankAccount(500000);
+acc.deposit(200000);
+acc.withdraw(100000);
+console.log(acc.getBalance());
+
+class UserAccount {
+  public username: string;
+  private password: string;
+
+  constructor(username: string, password: string) {
+    this.username = username;
+    this.password = password;
+  }
+
+  changePassword(newPassword: string) {
+    this.password = newPassword;
+  }
+
+  protected checkActive() {
+    console.log(`${this.username} faolligi tekshirildi.`);
+  }
+}
+
+const user1 = new UserAccount("bunyodbek", "12345");
+user1.changePassword("abcde");
+
+
+interface Animal {
+  name: string;
+  age: number;
+  speak(): void;
+}
+
+class Dog implements Animal {
+  name: string;
+  age: number;
+
+  constructor(name: string, age: number) {
+    this.name = name;
+    this.age = age;
+  }
+
+  speak() {
+    console.log(`${this.name} says: Woof!`);
+  }
+}
+
+class Cat implements Animal {
+  name: string;
+  age: number;
+
+  constructor(name: string, age: number) {
+    this.name = name;
+    this.age = age;
+  }
+
+  speak() {
+    console.log(`${this.name} says: Meow!`);
+  }
+}
+
+const dog = new Dog("Rex", 3);
+dog.speak();
+
+const cat = new Cat("Murka", 2);
+cat.speak();
+
+interface RentalItem {
+  id: number;
+  name: string;
+  pricePerDay: number;
+  rentItem(): void;
+  returnItem(): void;
+}
+
+class CarRental implements RentalItem {
+  id: number;
+  name: string;
+  pricePerDay: number;
+
+  constructor(id: number, name: string, pricePerDay: number) {
+    this.id = id;
+    this.name = name;
+    this.pricePerDay = pricePerDay;
+  }
+
+  rentItem() {
+    console.log(`${this.name} ijaraga olindi.`);
+  }
+
+  returnItem() {
+    console.log(`${this.name} qaytarildi.`);
+  }
+}
+
+class HouseRental implements RentalItem {
+  id: number;
+  name: string;
+  pricePerDay: number;
+
+  constructor(id: number, name: string, pricePerDay: number) {
+    this.id = id;
+    this.name = name;
+    this.pricePerDay = pricePerDay;
+  }
+
+  rentItem() {
+    console.log(`${this.name} uyi ijaraga olindi.`);
+  }
+
+  returnItem() {
+    console.log(`${this.name} uyi qaytarildi.`);
+  }
 }
 
 
-// 2)
-function merge<T extends object, U extends object>(obj1: T, obj2: U): T & U {
-    return { ...obj1, ...obj2 };
+abstract class Calculator {
+  abstract add(a: number, b: number): number;
+  abstract subtract(a: number, b: number): number;
+  abstract multiply(a: number, b: number): number;
 }
 
-type Sortable = number | string;
-
-function sortArray<T extends Sortable>(arr: T[]): T[] {
-    const newArr = [...arr];
-    return newArr.sort((a, b) => {
-        if (typeof a === 'string' && typeof b === 'string') {
-            return a.localeCompare(b);
-        }
-        if (typeof a === 'number' && typeof b === 'number') {
-            return a - b;
-        }
-        return 0;
-    });
+class SimpleCalculator extends Calculator {
+  add(a: number, b: number): number {
+    return a + b;
+  }
+  subtract(a: number, b: number): number {
+    return a - b;
+  }
+  multiply(a: number, b: number): number {
+    return a * b;
+  }
 }
 
-interface ArrayManager<T> {
-    add(item: T): void;
-    remove(item: T): boolean;
-    removeAtIndex(index: number): T | undefined;
-    getLength(): number;
-    getArray(): T[];
+const calc = new SimpleCalculator();
+console.log(calc.add(2, 3));
+console.log(calc.multiply(4, 5));
+
+abstract class Shape {
+  name: string;
+  constructor(name: string) {
+    this.name = name;
+  }
+  abstract getArea(): number;
+  abstract getPerimeter(): number;
 }
 
-class GenericArrayManager<T> implements ArrayManager<T> {
-    private items: T[] = [];
+class Circle extends Shape {
+  radius: number;
 
-    add(item: T): void {
-        this.items.push(item);
-    }
+  constructor(radius: number) {
+    super("Aylana");
+    this.radius = radius;
+  }
 
-    remove(item: T): boolean {
-        const index = this.items.indexOf(item);
-        if (index > -1) {
-            this.items.splice(index, 1);
-            return true;
-        }
-        return false;
-    }
+  getArea(): number {
+    return Math.PI * this.radius * this.radius;
+  }
 
-    removeAtIndex(index: number): T | undefined {
-        if (index >= 0 && index < this.items.length) {
-            return this.items.splice(index, 1)[0];
-        }
-        return undefined;
-    }
-
-    getLength(): number {
-        return this.items.length;
-    }
-
-    getArray(): T[] {
-        return [...this.items];
-    }
+  getPerimeter(): number {
+    return 2 * Math.PI * this.radius;
+  }
 }
 
-function processValue<T extends object | string>(value: T): T {
-    return value;
+class Rectangle extends Shape {
+  width: number;
+  height: number;
+
+  constructor(width: number, height: number) {
+    super("To‘rtburchak");
+    this.width = width;
+    this.height = height;
+  }
+
+  getArea(): number {
+    return this.width * this.height;
+  }
+
+  getPerimeter(): number {
+    return 2 * (this.width + this.height);
+  }
 }
 
-function removeDuplicates<T>(arr: T[]): T[] {
-    return Array.from(new Set(arr));
+const rect = new Rectangle(5, 10);
+console.log(rect.getArea());
+console.log(rect.getPerimeter());
+
+
+class Counter {
+  static count = 0;
+
+  constructor() {
+    Counter.count++;
+  }
+
+  static getCount() {
+    return Counter.count;
+  }
 }
 
+const c1 = new Counter();
+const c2 = new Counter();
+console.log(Counter.getCount());
 
-// 3)
-class KeyValueStore<K, V> {
-    private store: Map<K, V> = new Map();
+class Logger {
+  private static instance: Logger;
+  private constructor() {}
 
-    addPair(key: K, value: V): void {
-        this.store.set(key, value);
+  static getInstance(): Logger {
+    if (!Logger.instance) {
+      Logger.instance = new Logger();
     }
+    return Logger.instance;
+  }
 
-    getValue(key: K): V | undefined {
-        return this.store.get(key);
-    }
+  log(message: string) {
+    console.log("Log:", message);
+  }
 }
 
-class Stack<T> {
-    private items: T[] = [];
+const logger1 = Logger.getInstance();
+const logger2 = Logger.getInstance();
+console.log(logger1 === logger2); // true
 
-    push(element: T): void {
-        this.items.push(element);
-    }
 
-    pop(): T | undefined {
-        return this.items.pop();
-    }
+class Account {
+  accountNumber: number;
+  holderName: string;
+  balance: number;
 
-    peek(): T | undefined {
-        return this.items[this.items.length - 1];
-    }
+  constructor(accountNumber: number, holderName: string, balance: number) {
+    this.accountNumber = accountNumber;
+    this.holderName = holderName;
+    this.balance = balance;
+  }
 
-    isEmpty(): boolean {
-        return this.items.length === 0;
-    }
+  deposit(amount: number) {
+    this.balance += amount;
+  }
+
+  withdraw(amount: number) {
+    if (amount > this.balance) console.log("Yetarli mablag‘ yo‘q!");
+    else this.balance -= amount;
+  }
+
+  checkBalance() {
+    console.log(`${this.holderName} balansi: ${this.balance}`);
+  }
 }
 
-function searchData<T>(arr: T[], content: Partial<T>): T[] {
-    return arr.filter(item => {
-        for (const key in content) {
-            if (Object.prototype.hasOwnProperty.call(content, key)) {
-                if ((item as any)[key] !== content[key]) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    });
+class AdminAccount extends Account {
+  closeAccount() {
+    console.log(`${this.holderName} hisob yopildi.`);
+  }
 }
 
-interface Pair<K, V> {
-    key: K;
-    value: V;
+class CustomerAccount extends Account {
+  viewBalance() {
+    console.log(`${this.holderName} balansi: ${this.balance}`);
+  }
 }
 
-function mergePairs<K1, V1, K2, V2>(pair1: Pair<K1, V1>, pair2: Pair<K2, V2>): Pair<K1 | K2, V1 | V2> {
-    return { ...pair1, ...pair2 } as Pair<K1 | K2, V1 | V2>;
+class Product {
+  name: string;
+  price: number;
+  category: string;
+
+  constructor(name: string, price: number, category: string) {
+    this.name = name;
+    this.price = price;
+    this.category = category;
+  }
 }
 
-class LimitedArray<T> {
-    private items: T[] = [];
-    private readonly maxSize: number;
+class DiscountedProduct extends Product {
+  discount: number;
 
-    constructor(maxSize: number) {
-        if (maxSize <= 0) {
-            throw new Error("Maksimal uzunlik musbat son bo'lishi kerak.");
-        }
-        this.maxSize = maxSize;
-    }
+  constructor(name: string, price: number, category: string, discount: number) {
+    super(name, price, category);
+    this.discount = discount;
+  }
 
-    addItem(item: T): void {
-        if (this.items.length >= this.maxSize) {
-            throw new Error(`Array maksimal uzunlikka (${this.maxSize}) yetdi. Element qo'shib bo'lmaydi.`);
-        }
-        this.items.push(item);
-    }
-
-    getArray(): T[] {
-        return [...this.items];
-    }
+  getDiscountedPrice() {
+    return this.price - (this.price * this.discount) / 100;
+  }
 }
 
-
-// 4)
-class Queue<T> {
-    private items: T[] = [];
-
-    enqueue(element: T): void {
-        this.items.push(element);
-    }
-
-    dequeue(): T | undefined {
-        return this.items.shift();
-    }
-
-    peek(): T | undefined {
-        return this.items[0];
-    }
-
-    isEmpty(): boolean {
-        return this.items.length === 0;
-    }
+abstract class Character {
+  abstract attack(): void;
+  abstract defend(): void;
 }
 
-interface RecursiveObject<T> {
-    [key: string]: T | RecursiveObject<T> | unknown;
+class Warrior extends Character {
+  attack() {
+    console.log("Warrior qilich bilan hujum qildi!");
+  }
+  defend() {
+    console.log("Warrior qalqon bilan himoyalandi!");
+  }
 }
 
-function isRecursiveObject<T>(value: T | RecursiveObject<T> | unknown): value is RecursiveObject<T> {
-    return typeof value === 'object' && value !== null && !Array.isArray(value);
+class Mage extends Character {
+  attack() {
+    console.log("Mage sehrli hujum qildi!");
+  }
+  defend() {
+    console.log("Mage himoya sehrini ishlatdi!");
+  }
 }
-
-function findValueByKey<T>(obj: RecursiveObject<T>, targetKey: string): (T | RecursiveObject<T> | unknown)[] {
-    let results: (T | RecursiveObject<T> | unknown)[] = [];
-
-    for (const key in obj) {
-        if (Object.prototype.hasOwnProperty.call(obj, key)) {
-            const value = obj[key];
-            if (key === targetKey) {
-                results.push(value);
-            }
-            if (isRecursiveObject(value)) {
-                results = results.concat(findValueByKey(value as RecursiveObject<T>, targetKey));
-            }
-        }
-    }
-    return results;
-}
-
-function filterArray<T, U>(arr: (T | U)[], typeGuard: (item: T | U) => item is U): U[] {
-    return arr.filter(typeGuard) as U[];
-}
-
-function getUniqueElements<T>(arr: T[]): T[] {
-    return Array.from(new Set(arr));
-}
-
-class MultiGenericStore<T, U> {
-    private delegateKey: T;
-    private value: U;
-
-    constructor(delegateKey: T, value: U) {
-        this.delegateKey = delegateKey;
-        this.value = value;
-    }
-
-    getDelegateKey(): T {
-        return this.delegateKey;
-    }
-
-    getValue(): U {
-        return this.value;
-    }
-}
-
-const myStore = new MultiGenericStore<string, number>("user_id", 12345);
